@@ -262,3 +262,16 @@ ENG101,English Composition,3,Dr. Davis,SUMMER,ENGLISH
   java -cp bin edu.ccrm.cli.Main
   ```
 ---
+# 📷 Screenshots
+
+* ## Java version and JDK Verification
+![Java version](Screenshots/jdk_verification.png)
+* ## IntelliJ
+![Eclipse](Screenshots/project_directories.png)
+* ## Landing page
+![Landing page](Screenshots/cli_menu.png)
+* ## Operation
+![Operations](Screenshots/Student_Add.png)
+* ## Export and Backup
+![Export and backup](Screenshots/export_folder.png)
+---

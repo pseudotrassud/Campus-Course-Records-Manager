@@ -338,7 +338,6 @@ public class Main {
         }
         System.out.println(transcriptService.buildTranscript(s));
     }
-
     // ------------------ File Utilities ------------------
     private static void fileUtilitiesMenu() {
         while (true) {
@@ -369,29 +368,74 @@ public class Main {
                     }
                     case "3" -> {
                         Path file = askPath("export students");
-                        ioService.exportStudents(file);
-                        System.out.println("Students exported to: " + file);
+
+                        // Check if we have data first
+                        if (studentService.getAllStudents().isEmpty()) {
+                            System.out.println("WARNING: No student data to export! Add students first or use option 10 for sample data.");
+                        } else {
+                            ioService.exportStudents(file);
+                            System.out.println("Students exported to: " + file);
+                            System.out.println("Exported " + studentService.getAllStudents().size() + " students");
+                        }
                     }
                     case "4" -> {
                         Path file = askPath("export courses");
-                        ioService.exportCourses(file);
-                        System.out.println("Courses exported to: " + file);
+
+                        if (courseService.getAllCourses().isEmpty()) {
+                            System.out.println("WARNING: No course data to export! Add courses first or use option 10 for sample data.");
+                        } else {
+                            ioService.exportCourses(file);
+                            System.out.println("Courses exported to: " + file);
+                            System.out.println("Exported " + courseService.getAllCourses().size() + " courses");
+                        }
                     }
                     case "5" -> {
                         Path file = askPath("export enrollments");
-                        ioService.exportEnrollments(file);
-                        System.out.println("Enrollments exported to: " + file);
+
+                        if (enrollmentService.getAllEnrollments().isEmpty()) {
+                            System.out.println("WARNING: No enrollment data to export! Enroll students in courses first.");
+                        } else {
+                            ioService.exportEnrollments(file);
+                            System.out.println("Enrollments exported to: " + file);
+                            System.out.println("Exported " + enrollmentService.getAllEnrollments().size() + " enrollments");
+                        }
                     }
                     case "6" -> {
-                        Path exportDir = askPath("export directory").toAbsolutePath();
-                        Path backupRoot = askPath("backup root directory").toAbsolutePath();
+                        // FIXED: Use askDirectory instead of askPath for backup
+                        System.out.print("Enter EXPORT directory to backup: ");
+                        String exportDirPath = sc.nextLine().trim();
+                        Path exportDir = Path.of(exportDirPath).toAbsolutePath();
+
+                        System.out.print("Enter BACKUP root directory: ");
+                        String backupRootPath = sc.nextLine().trim();
+                        Path backupRoot = Path.of(backupRootPath).toAbsolutePath();
+
+                        // Verify export directory exists and has files
+                        if (!java.nio.file.Files.exists(exportDir)) {
+                            System.out.println("Export directory doesn't exist: " + exportDir);
+                            System.out.println("Please export some data first (options 3, 4, or 5)");
+                            break;
+                        }
+
+                        try (java.util.stream.Stream<Path> files = java.nio.file.Files.list(exportDir)) {
+                            long fileCount = files.filter(java.nio.file.Files::isRegularFile).count();
+                            if (fileCount == 0) {
+                                System.out.println("No files found in export directory. Export data first!");
+                                break;
+                            }
+                            System.out.println("Found " + fileCount + " files to backup");
+                        }
+
+                        System.out.println("Starting backup...");
                         Path backupDir = backupService.backupData(exportDir, backupRoot);
-                        System.out.println("Backup created at: " + backupDir);
+                        System.out.println("✓ Backup created at: " + backupDir);
                     }
                     case "7" -> {
-                        Path backupDir = askPath("backup directory");
-                        long size = backupService.computeFolderSize(backupDir);
-                        System.out.println("Backup size (bytes): " + size);
+                        System.out.print("Enter directory to check size: ");
+                        String dirPath = sc.nextLine().trim();
+                        Path dir = Path.of(dirPath);
+                        long size = backupService.computeFolderSize(dir);
+                        System.out.println("Folder size: " + size + " bytes (" + backupService.formatSize(size) + ")");
                     }
                     case "8" -> { return; }
                     case "9" -> {
@@ -403,7 +447,8 @@ public class Main {
                     default -> System.out.println("Invalid choice.");
                 }
             } catch (Exception e) {
-                System.out.println("I/O error: " + e.getMessage());
+                System.out.println("Error: " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }

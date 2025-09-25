@@ -24,5 +24,10 @@ public class Student extends Person {
 
     public void enrollInCourse(Course course) {this.enrolledCourses.add(course);}
     public void unenrollFromCourse(Course course) {this.enrolledCourses.remove(course);}
-
+    public String getPhoneNo() {
+        return super.getPhoneNumber(); // or whatever your Person class uses
+    }
+    public String getEmail() {
+        return super.getEmail(); // or however you store email in Person
+    }
 }
