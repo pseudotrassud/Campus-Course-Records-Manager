@@ -453,14 +453,14 @@ public class Main {
             return "<6";
         };
         for (Student s : students) {
-            Double gpa = transcriptService.computeGpa(s); // fixed name
+            Double gpa = transcriptService.computeGpa(s); //fixed name
             String key = bucket.apply(gpa);
             buckets.merge(key, 1L, Long::sum);
         }
         buckets.forEach((k,v) -> System.out.println(k + " -> " + v));
     }
 
-    // ------------------ Helper ------------------
+    //Helper
     private static Path askPath(String operationType) {
         System.out.print("Enter directory path where you want to " + operationType + ": ");
         String directoryPath = sc.nextLine().trim();

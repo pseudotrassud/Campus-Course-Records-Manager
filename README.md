@@ -262,20 +262,3 @@ ENG101,English Composition,3,Dr. Davis,SUMMER,ENGLISH
   java -cp bin edu.ccrm.cli.Main
   ```
 ---
-# Campus Course Records Manager
-
-## 📸 Screenshots
-
-### Development Environment
-| JDK Installation | IDE Setup |
-|------------------|-----------|
-| ![JDK Version](screenshots/jdk-version.png) | ![Project Structure](screenshots/project-structure.png) |
-
-### Application Features
-| Core Operations | File Management |
-|-----------------|-----------------|
-| ![Student Management](screenshots/student-management.png) | ![Import Export](/Users/trassud/CCRM/Screenshots/file_utilities.png) |
-
-| Advanced Features | System Output |
-|-------------------|---------------|
-| ![GPA Calculation](screenshots/gpa-calculation.png) | ![Backup System](screenshots/backup-system.png) |
